@@ -19,7 +19,7 @@ public class Editor {
   @PostConstruct
   public void init() {
     editableElements = new ArrayList<>();
-    File file = new File("/home/lev/projects/jsf-primefaces-wildfly/src/main/resources/template.xml");
+    File file = new File("/home/lev/projects/template-editor/src/main/resources/template.xml");
 
     Unmarshaller jaxbUnmarshaller;
     try {
@@ -34,10 +34,6 @@ public class Editor {
 
   public void save() {
     System.out.println("save action");
-    EditableElement test = new EditableElement();
-    test.setHeight(50);
-    test.setWidth(50);
-    test.setText("test");
     File file = new File("/home/lev/projects/template-editor/src/main/resources/template.xml");
     JAXBContext jaxbContext;
     try {

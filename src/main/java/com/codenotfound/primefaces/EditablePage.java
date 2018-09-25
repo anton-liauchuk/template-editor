@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @XmlRootElement
-public class EditableElementList {
+public class EditablePage {
 
     private List<EditableElement> editableElements = new ArrayList<>();
 

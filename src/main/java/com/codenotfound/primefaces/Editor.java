@@ -1,5 +1,7 @@
 package com.codenotfound.primefaces;
 
+import org.primefaces.component.outputpanel.OutputPanel;
+import org.primefaces.component.panel.Panel;
 import org.primefaces.event.DragDropEvent;
 
 import javax.annotation.PostConstruct;
@@ -19,6 +21,7 @@ public class Editor {
 
   private EditablePage editablePage;
   private List<EditableElement> editableElements;
+  private OutputPanel pageTemplate;
 
   @PostConstruct
   public void init() {
@@ -38,6 +41,12 @@ public class Editor {
 
   public void save() {
     System.out.println("save action");
+    System.out.println(pageTemplate.getStyleClass());
+    pageTemplate.getChildren().forEach(comp -> {
+      if (comp instanceof Panel) {
+        System.out.println(((Panel) comp).getStyle());
+      }
+    });
     File file = new File("/home/lev/projects/template-editor/src/main/resources/template.xml");
     JAXBContext jaxbContext;
     try {
@@ -52,18 +61,15 @@ public class Editor {
 
   }
 
-  public void onDrag(DragDropEvent ddEvent) {
-    String draggedId = ddEvent.getDragId();
-    String droppedId = ddEvent.getDropId();
-    Object data = ddEvent.getData();
-    Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-    String left = params.get(draggedId + "_left");
-    String top = params.get(draggedId + "_top");
-    System.out.println("left: " + left);
-    System.out.println("top: " + top);
-  }
-
   public List<EditableElement> getEditableElements() {
     return editableElements;
+  }
+
+  public OutputPanel getPageTemplate() {
+    return pageTemplate;
+  }
+
+  public void setPageTemplate(OutputPanel pageTemplate) {
+    this.pageTemplate = pageTemplate;
   }
 }

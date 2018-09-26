@@ -36,7 +36,7 @@
     </h:outputStylesheet>
 
     <h:form>
-        <p:outputPanel id="restrictPanel" layout="block" styleClass="editable-page">
+        <p:outputPanel id="restrictPanel" layout="block" styleClass="editable-page" binding="#{editor.pageTemplate}">
             <ui:repeat value="#{editor.editableElements}" var="editableElement" varStatus="status">
                 <p:panel id="draggablePanel"  style="left: #{editableElement.left}px; top: #{editableElement.top}px;"
                          styleClass="draggable-panel">
@@ -46,9 +46,7 @@
                         <p:ajax/>
                     </p:inputTextarea>
                 </p:panel>
-                <p:draggable for="draggablePanel" containment="parent">
-                    <!--<p:ajax listener="#{editor.onDrag}" />-->
-                </p:draggable>
+                <p:draggable for="draggablePanel" containment="parent"/>
             </ui:repeat>
         </p:outputPanel>
         <p:commandButton global="false" action="#{editor.save}" value="Save"/>

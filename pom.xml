@@ -69,8 +69,7 @@
         <version>${wildfly-maven-plugin.version}</version>
         <configuration>
           <javaOpts>
-            <javaOpt>-agentlib:jdwp=transport=dt_socket,address=9087,server=y,suspend=n</javaOpt>
-            <javaOpt>-Djboss.http.port=8380</javaOpt>
+            <javaOpt>-agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n</javaOpt>
           </javaOpts>
         </configuration>
       </plugin>

@@ -1,14 +1,17 @@
 package com.codenotfound.primefaces;
 
+import com.codenotfound.primefaces.converter.EditableElementConverter;
 import com.sun.faces.facelets.component.UIRepeat;
 import org.primefaces.component.outputpanel.OutputPanel;
 import org.primefaces.component.panel.Panel;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -22,8 +25,12 @@ import java.util.Map;
 @ViewScoped
 public class Editor {
 
+  @EJB
+  private EditableElementConverter editableElementConverter;
+
   private EditablePage editablePage;
   private List<EditableElement> editableElements;
+  private List<DraggableComponent> draggableComponents;
   private OutputPanel pageTemplate;
 
   @PostConstruct
@@ -43,24 +50,11 @@ public class Editor {
   }
 
   public void sendPositions(ComponentList comps) {
-    System.out.println(comps.getComps().size());
-    System.out.println(comps.getComps().get(0).getLeft());
+    draggableComponents = comps.getComps();
   }
 
   public void save() {
-    UIViewRoot view = FacesContext.getCurrentInstance().getViewRoot();
-    System.out.println("save action");
-    System.out.println(pageTemplate.getStyleClass());
-    pageTemplate.getChildren().forEach(comp -> {
-      if (comp instanceof UIRepeat) {
-        UIRepeat uiRepeat = (UIRepeat) comp;
-        uiRepeat.getChildren().forEach(child -> {
-          if (child instanceof Panel) {
-            System.out.println(((Panel) child).getStyle());
-          }
-        });
-      }
-    });
+    editableElements = editableElementConverter.convert(draggableComponents, editableElements);
     File file = new File("/home/lev/projects/template-editor/src/main/resources/template.xml");
     JAXBContext jaxbContext;
     try {

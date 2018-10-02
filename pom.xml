@@ -49,6 +49,11 @@
       <artifactId>primefaces</artifactId>
       <version>${primefaces.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.primefaces.extensions</groupId>
+      <artifactId>primefaces-extensions</artifactId>
+      <version>6.1.0</version>
+    </dependency>
   </dependencies>
 
   <build>

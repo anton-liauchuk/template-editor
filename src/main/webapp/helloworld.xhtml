@@ -4,7 +4,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head>
     <title>PrimeFaces Editor</title>
@@ -35,21 +37,49 @@
         }
     </h:outputStylesheet>
 
+    <script  type="text/javascript">
+        var comps = [];
+        var draggableComponent;
+
+        function findAllPositions(){
+            comps = [];
+            $(".draggable-panel").each(function() {
+                var index = ($(this).attr('class').split('draggablePanel')[1]).charAt(0);
+                draggableComponent = {
+                    index: index,
+                    name: "draggablePanel",
+                    left: $(this).css("left").replace("px", ""),
+                    top: $(this).css("top").replace("px", "")
+                };
+                comps.push(draggableComponent);
+                console.log('here');
+            });
+        }
+    </script>
+
     <h:form>
+
+        <pe:remoteCommand id="applyDataCommand" name="updateRestrictPanel" actionListener="#{editor.sendPositions}">
+            <pe:methodSignature parameters="com.codenotfound.primefaces.ComponentList" />
+            <pe:methodParam name="comps">
+                <pe:convertJson />
+            </pe:methodParam>
+        </pe:remoteCommand>
+
         <p:outputPanel id="restrictPanel" layout="block" styleClass="editable-page" binding="#{editor.pageTemplate}">
             <ui:repeat value="#{editor.editableElements}" var="editableElement" varStatus="status">
                 <p:panel id="draggablePanel"  style="left: #{editableElement.left}px; top: #{editableElement.top}px;"
-                         styleClass="draggable-panel">
+                         styleClass="draggable-panel draggablePanel#{status.index}">
                     <p:inputTextarea id="editableElement" styleClass="editableElement#{status.index}"
                                      style="width: #{editableElement.width}px; height: #{editableElement.height}px;"
                                      value="#{editableElement.text}">
                         <p:ajax/>
                     </p:inputTextarea>
                 </p:panel>
-                <p:draggable for="draggablePanel" containment="parent"/>
+                <p:draggable widgetVar="draggablePanel" for="draggablePanel" containment="parent"/>
             </ui:repeat>
         </p:outputPanel>
-        <p:commandButton global="false" action="#{editor.save}" value="Save"/>
+        <p:commandButton onclick="findAllPositions(); updateRestrictPanel(JSON.stringify({comps: comps}))" global="false" action="#{editor.save}" value="Save"/>
     </h:form>
 </h:body>
 </html>

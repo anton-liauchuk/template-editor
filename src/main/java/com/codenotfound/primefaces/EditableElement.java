@@ -6,27 +6,27 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class EditableElement {
 
-    private Integer width;
-    private Integer height;
+    private Double width;
+    private Double height;
     private String text;
-    private Integer left;
-    private Integer top;
+    private Double left;
+    private Double top;
 
-    public Integer getWidth() {
+    public Double getWidth() {
         return width;
     }
 
     @XmlElement
-    public void setWidth(Integer width) {
+    public void setWidth(Double width) {
         this.width = width;
     }
 
-    public Integer getHeight() {
+    public Double getHeight() {
         return height;
     }
 
     @XmlElement
-    public void setHeight(Integer height) {
+    public void setHeight(Double height) {
         this.height = height;
     }
 
@@ -39,21 +39,21 @@ public class EditableElement {
         this.text = text;
     }
 
-    public Integer getLeft() {
+    public Double getLeft() {
         return left;
     }
 
     @XmlElement
-    public void setLeft(Integer left) {
+    public void setLeft(Double left) {
         this.left = left;
     }
 
-    public Integer getTop() {
+    public Double getTop() {
         return top;
     }
 
     @XmlElement
-    public void setTop(Integer top) {
+    public void setTop(Double top) {
         this.top = top;
     }
 }

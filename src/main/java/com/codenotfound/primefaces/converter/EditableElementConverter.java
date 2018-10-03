@@ -22,6 +22,8 @@ public class EditableElementConverter {
             if (draggableComponent != null) {
                 editableElement.setLeft(draggableComponent.getLeft());
                 editableElement.setTop(draggableComponent.getTop());
+                editableElement.setWidth(draggableComponent.getWidth());
+                editableElement.setHeight(draggableComponent.getHeight());
             }
         }
 

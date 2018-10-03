@@ -45,14 +45,16 @@
             comps = [];
             $(".draggable-panel").each(function() {
                 var index = ($(this).attr('class').split('draggablePanel')[1]).charAt(0);
+                var editableElement = $(this).find('.editable-element');
                 draggableComponent = {
                     index: index,
                     name: "draggablePanel",
                     left: $(this).css("left").replace("px", ""),
-                    top: $(this).css("top").replace("px", "")
+                    top: $(this).css("top").replace("px", ""),
+                    width: $(editableElement).css("width").replace("px", ""),
+                    height: $(editableElement).css("height").replace("px", "")
                 };
                 comps.push(draggableComponent);
-                console.log('here');
             });
         }
     </script>
@@ -70,7 +72,7 @@
             <ui:repeat value="#{editor.editableElements}" var="editableElement" varStatus="status">
                 <p:panel id="draggablePanel"  style="left: #{editableElement.left}px; top: #{editableElement.top}px;"
                          styleClass="draggable-panel draggablePanel#{status.index}">
-                    <p:inputTextarea id="editableElement" styleClass="editableElement#{status.index}"
+                    <p:inputTextarea id="editableElement" styleClass="editable-element editableElement#{status.index}"
                                      style="width: #{editableElement.width}px; height: #{editableElement.height}px;"
                                      value="#{editableElement.text}">
                         <p:ajax/>

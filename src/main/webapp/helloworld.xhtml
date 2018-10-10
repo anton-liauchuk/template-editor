@@ -68,7 +68,9 @@
             </pe:methodParam>
         </pe:remoteCommand>
 
-        <p:outputPanel id="restrictPanel" layout="block" styleClass="editable-page" binding="#{editor.pageTemplate}">
+        <p:outputPanel id="restrictPanel" layout="block" styleClass="editable-page">
+            <!--<p:outputPanel id="header" style="height: #{editor.template.header.height}px; border: 1px solid #666666;"/>-->
+
             <ui:repeat value="#{editor.editableElements}" var="editableElement" varStatus="status">
                 <p:panel id="draggablePanel"  style="left: #{editableElement.left}px; top: #{editableElement.top}px;"
                          styleClass="draggable-panel draggablePanel#{status.index}">
@@ -79,7 +81,12 @@
                     </p:inputTextarea>
                 </p:panel>
                 <p:draggable widgetVar="draggablePanel" for="draggablePanel" containment="parent"/>
+                <p:tooltip id="toolTipFade" widgetVar="tooltip" value="Test" position="top" for="draggablePanel">
+                    <p:commandLink value="Link"/>
+                </p:tooltip>
             </ui:repeat>
+
+            <!--<p:outputPanel id="footer" style="height: #{editor.template.footer.height}px; border: 1px solid #666666;"/>-->
         </p:outputPanel>
         <p:commandButton onclick="findAllPositions(); updateRestrictPanel(JSON.stringify({comps: comps}))" global="false" action="#{editor.save}" value="Save"/>
     </h:form>

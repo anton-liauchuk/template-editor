@@ -28,10 +28,9 @@ public class Editor {
   @EJB
   private EditableElementConverter editableElementConverter;
 
-  private EditablePage editablePage;
+  private Template template;
   private List<EditableElement> editableElements;
   private List<DraggableComponent> draggableComponents;
-  private OutputPanel pageTemplate;
 
   @PostConstruct
   public void init() {
@@ -40,10 +39,10 @@ public class Editor {
 
     Unmarshaller jaxbUnmarshaller;
     try {
-      JAXBContext jaxbContext = JAXBContext.newInstance(EditablePage.class);
+      JAXBContext jaxbContext = JAXBContext.newInstance(Template.class);
       jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-      editablePage = (EditablePage) jaxbUnmarshaller.unmarshal(file);
-      editableElements = editablePage.getEditableElements();
+      template = (Template) jaxbUnmarshaller.unmarshal(file);
+      editableElements = template.getEditablePage().getEditableElements();
     } catch (JAXBException e) {
       e.printStackTrace();
     }
@@ -58,11 +57,11 @@ public class Editor {
     File file = new File("/home/lev/projects/template-editor/src/main/resources/template.xml");
     JAXBContext jaxbContext;
     try {
-      jaxbContext = JAXBContext.newInstance(EditablePage.class);
+      jaxbContext = JAXBContext.newInstance(Template.class);
       Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
       jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-      jaxbMarshaller.marshal(editablePage, file);
+      jaxbMarshaller.marshal(template, file);
     } catch (JAXBException e) {
       e.printStackTrace();
     }
@@ -73,11 +72,7 @@ public class Editor {
     return editableElements;
   }
 
-  public OutputPanel getPageTemplate() {
-    return pageTemplate;
-  }
-
-  public void setPageTemplate(OutputPanel pageTemplate) {
-    this.pageTemplate = pageTemplate;
+  public Template getTemplate() {
+    return template;
   }
 }

@@ -2,13 +2,14 @@ package com.codenotfound.primefaces;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 @XmlRootElement
+@XmlSeeAlso({NormalPanel.class})
 public class EditableElement {
 
     private Double width;
     private Double height;
-    private String text;
     private Double left;
     private Double top;
 
@@ -28,15 +29,6 @@ public class EditableElement {
     @XmlElement
     public void setHeight(Double height) {
         this.height = height;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    @XmlElement
-    public void setText(String text) {
-        this.text = text;
     }
 
     public Double getLeft() {

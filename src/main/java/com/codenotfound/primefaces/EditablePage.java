@@ -1,7 +1,6 @@
 package com.codenotfound.primefaces;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +13,7 @@ public class EditablePage {
         return editableElements;
     }
 
+    @XmlElementRef
     public void setEditableElements(List<EditableElement> editableElements) {
         this.editableElements = editableElements;
     }

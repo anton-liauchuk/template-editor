@@ -82,7 +82,7 @@
                 </p:panel>
                 <p:draggable widgetVar="draggablePanel" for="draggablePanel" containment="parent"/>
                 <p:tooltip id="toolTipFade" widgetVar="tooltip" value="Test asadasdasdasd" position="top" for="draggablePanel">
-                    <p:commandLink value="Link asdasdasdasd"/>
+                    <p:commandLink action="#{normalPanelEditor.reset(editableElement)}" value="Link asdasdasdasd" oncomplete="PF('normalPanelEditorDlg').show()"/>
                 </p:tooltip>
             </ui:repeat>
 
@@ -90,5 +90,7 @@
         </p:outputPanel>
         <p:commandButton onclick="findAllPositions(); updateRestrictPanel(JSON.stringify({comps: comps}))" global="false" action="#{editor.save}" value="Save"/>
     </h:form>
+
+    <ui:include src="/normalPanelDialog.xhtml" />
 </h:body>
 </html>

@@ -45,14 +45,13 @@
             comps = [];
             $(".draggable-panel").each(function() {
                 var index = ($(this).attr('class').split('draggablePanel')[1]).charAt(0);
-                var editableElement = $(this).find('.editable-element');
                 draggableComponent = {
                     index: index,
                     name: "draggablePanel",
                     left: $(this).css("left").replace("px", ""),
                     top: $(this).css("top").replace("px", ""),
-                    width: $(editableElement).css("width").replace("px", ""),
-                    height: $(editableElement).css("height").replace("px", "")
+                    width: $(this).css("width").replace("px", ""),
+                    height: $(this).css("height").replace("px", "")
                 };
                 comps.push(draggableComponent);
             });
@@ -72,17 +71,17 @@
             <!--<p:outputPanel id="header" style="height: #{editor.template.header.height}px; border: 1px solid #666666;"/>-->
 
             <ui:repeat value="#{editor.editableElements}" var="editableElement" varStatus="status">
-                <p:panel id="draggablePanel"  style="left: #{editableElement.left}px; top: #{editableElement.top}px;"
+                <p:panel id="draggablePanel"  style="left: #{editableElement.left}px; top: #{editableElement.top}px; width: #{editableElement.width}px; height: #{editableElement.height}px;"
                          styleClass="draggable-panel draggablePanel#{status.index}">
-                    <p:inputTextarea id="editableElement" styleClass="editable-element editableElement#{status.index}"
-                                     style="width: #{editableElement.width}px; height: #{editableElement.height}px;"
-                                     value="#{editableElement.text}">
-                        <p:ajax/>
-                    </p:inputTextarea>
+                    <h:outputText value="#{editableElement.text}"/>
                 </p:panel>
+                <p:resizable for="draggablePanel" />
                 <p:draggable widgetVar="draggablePanel" for="draggablePanel" containment="parent"/>
                 <p:tooltip id="toolTipFade" widgetVar="tooltip" value="Test asadasdasdasd" position="top" for="draggablePanel">
-                    <p:commandLink action="#{normalPanelEditor.reset(editableElement)}" value="Link asdasdasdasd" oncomplete="PF('normalPanelEditorDlg').show()"/>
+                    <p:commandLink action="#{normalPanelEditor.reset(editableElement)}"
+                                   value="Link asdasdasdasd"
+                                   update=":normalPanelForm"
+                                   oncomplete="PF('normalPanelEditorDlg').show()"/>
                 </p:tooltip>
             </ui:repeat>
 

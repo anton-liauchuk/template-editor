@@ -6,8 +6,12 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets">
 
     <p:dialog header="Normal Panel Editor" widgetVar="normalPanelEditorDlg" minHeight="40">
-        <p:editor id="normalPanelEditor" widgetVar="normalPanelEditor" value="#{normalPanelEditor.normalPanel.text}" width="600">
-            <!--<p:ajax/>-->
-        </p:editor>
+        <h:form id="normalPanelForm">
+            <p:editor id="normalPanelEditor" widgetVar="normalPanelEditor" value="#{normalPanelEditor.normalPanel.text}" width="600"/>
+            <p:commandButton value="Submit"
+                             update="@(.editable-page)"
+                             oncomplete="PF('normalPanelEditorDlg').hide()"
+                             icon="ui-icon-disk" />
+        </h:form>
     </p:dialog>
 </ui:composition>

@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
 @XmlRootElement
-@XmlSeeAlso({NormalPanel.class})
+@XmlSeeAlso({NormalPanel.class, PositionTable.class})
 public class EditableElement {
 
     private Double width;

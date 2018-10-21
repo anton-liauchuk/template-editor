@@ -71,18 +71,18 @@
             <!--<p:outputPanel id="header" style="height: #{editor.template.header.height}px; border: 1px solid #666666;"/>-->
 
             <ui:repeat value="#{editor.editableElements}" var="editableElement" varStatus="status">
-                <p:panel id="draggablePanel"  style="left: #{editableElement.left}px; top: #{editableElement.top}px; width: #{editableElement.width}px; height: #{editableElement.height}px;"
-                         styleClass="draggable-panel draggablePanel#{status.index}">
-                    <h:outputText value="#{editableElement.text}"/>
-                </p:panel>
-                <p:resizable for="draggablePanel" />
-                <p:draggable widgetVar="draggablePanel" for="draggablePanel" containment="parent"/>
-                <p:tooltip id="toolTipFade" widgetVar="tooltip" value="Test asadasdasdasd" position="top" for="draggablePanel">
-                    <p:commandLink action="#{normalPanelEditor.reset(editableElement)}"
-                                   value="Link asdasdasdasd"
-                                   update=":normalPanelForm"
-                                   oncomplete="PF('normalPanelEditorDlg').show()"/>
-                </p:tooltip>
+                <ui:fragment rendered="#{editableElement['class'].simpleName eq 'NormalPanel'}">
+                    <ui:include src="normalPanel.xhtml">
+                        <ui:param name="editableElement" value="#{editableElement}"/>
+                        <ui:param name="status" value="#{status}"/>
+                    </ui:include>
+                </ui:fragment>
+                <ui:fragment rendered="#{editableElement['class'].simpleName eq 'PositionTable'}">
+                    <ui:include src="positionTable.xhtml">
+                        <ui:param name="editableElement" value="#{editableElement}"/>
+                        <ui:param name="status" value="#{status}"/>
+                    </ui:include>
+                </ui:fragment>
             </ui:repeat>
 
             <!--<p:outputPanel id="footer" style="height: #{editor.template.footer.height}px; border: 1px solid #666666;"/>-->

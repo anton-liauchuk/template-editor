@@ -1,0 +1,21 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <p:panel id="draggablePanel"
+             style="left: #{editableElement.left}px; top: #{editableElement.top}px; width: #{editableElement.width}px; height: #{editableElement.height}px;"
+             styleClass="draggable-panel draggablePanel#{status.index}">
+        <h:outputText value="#{editableElement.text}"/>
+    </p:panel>
+    <p:resizable for="draggablePanel"/>
+    <p:draggable widgetVar="draggablePanel" for="draggablePanel" containment="parent"/>
+    <p:tooltip id="toolTipFade" widgetVar="tooltip" value="Test asadasdasdasd" position="top" for="draggablePanel">
+        <p:commandLink action="#{normalPanelEditor.reset(editableElement)}"
+                       value="Link asdasdasdasd"
+                       update=":normalPanelForm"
+                       oncomplete="PF('normalPanelEditorDlg').show()"/>
+    </p:tooltip>
+</ui:composition>

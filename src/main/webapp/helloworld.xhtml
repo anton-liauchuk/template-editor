@@ -35,6 +35,20 @@
             width: auto;
             height: auto;
         }
+
+        .draggable-panel .ui-datatable-tablewrapper .ui-datatable-empty-message td {
+            text-indent: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .ui-datalist-content {
+            border: none;
+        }
+
+        .ui-datalist-content ul {
+            list-style-type: none;
+        }
     </h:outputStylesheet>
 
     <script  type="text/javascript">
@@ -69,9 +83,34 @@
 
         <p:outputPanel id="restrictPanel" layout="block" styleClass="editable-page">
             <!--<p:outputPanel id="header" style="height: #{editor.template.header.height}px; border: 1px solid #666666;"/>-->
-
-            <ui:repeat value="#{editor.editableElements}" var="editableElement" varStatus="status">
-                <ui:fragment rendered="#{editableElement['class'].simpleName eq 'NormalPanel'}">
+            <p:dataList rowIndexVar="listRowIndex" value="#{editor.editableElements}" var="editableElement" varStatus="status">
+                <p:panel id="draggablePanel"
+                              style="left: #{editableElement.left}px; top: #{editableElement.top}px; width: #{editableElement.width}px; height: #{editableElement.height}px;"
+                              styleClass="draggable-panel draggablePanel#{listRowIndex}">
+                    <ui:fragment rendered="#{editableElement['class'].simpleName eq 'NormalPanel'}">
+                        <h:outputText value="#{editableElement.text}"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{editableElement['class'].simpleName eq 'PositionTable'}">
+                        <p:dataTable>
+                            <p:columns value="#{editableElement.columnConfigs}" var="columnConfig" rendered="#{columnConfig.enabled}" headerText="#{columnConfig.title}"/>
+                        </p:dataTable>
+                    </ui:fragment>
+                </p:panel>
+                <p:resizable for="draggablePanel"/>
+                <p:draggable for="draggablePanel" containment="restrictPanel"/>
+                <p:tooltip id="toolTipFade" value="Test asadasdasdasd" position="top" for="draggablePanel">
+                    <p:commandLink action="#{normalPanelEditor.reset(editableElement)}"
+                                   value="Edit Normal Panel"
+                                   update=":normalPanelForm"
+                                   rendered="#{editableElement['class'].simpleName eq 'NormalPanel'}"
+                                   oncomplete="PF('normalPanelEditorDlg').show()"/>
+                    <p:commandLink action="#{positionTableEditor.reset(editableElement)}"
+                                   value="Edit Position Table"
+                                   update=":positionTableForm"
+                                   rendered="#{editableElement['class'].simpleName eq 'PositionTable'}"
+                                   oncomplete="PF('positionTableEditorDlg').show()"/>
+                </p:tooltip>
+                <!--<ui:fragment rendered="#{editableElement['class'].simpleName eq 'NormalPanel'}">
                     <ui:include src="normalPanel.xhtml">
                         <ui:param name="editableElement" value="#{editableElement}"/>
                         <ui:param name="status" value="#{status}"/>
@@ -82,8 +121,8 @@
                         <ui:param name="editableElement" value="#{editableElement}"/>
                         <ui:param name="status" value="#{status}"/>
                     </ui:include>
-                </ui:fragment>
-            </ui:repeat>
+                </ui:fragment>-->
+            </p:dataList>
 
             <!--<p:outputPanel id="footer" style="height: #{editor.template.footer.height}px; border: 1px solid #666666;"/>-->
         </p:outputPanel>
@@ -91,5 +130,6 @@
     </h:form>
 
     <ui:include src="/normalPanelDialog.xhtml" />
+    <ui:include src="/positionTableDialog.xhtml" />
 </h:body>
 </html>

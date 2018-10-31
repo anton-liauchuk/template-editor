@@ -7,7 +7,12 @@
 
     <p:dialog header="Position Table Editor" widgetVar="positionTableEditorDlg" minHeight="40">
         <h:form id="positionTableForm">
+            <p:selectManyCheckbox id="columnBox" value="#{positionTableEditor.selectedColumns}" layout="grid" columns="3">
+                <f:selectItems value="#{positionTableEditor.configs}" var="config" itemLabel="#{config}" itemValue="#{config}" />
+            </p:selectManyCheckbox>
+
             <p:commandButton value="Submit"
+                             action="#{positionTableEditor.save}"
                              update="@(.editable-page)"
                              oncomplete="PF('positionTableEditorDlg').hide()"
                              icon="ui-icon-disk" />

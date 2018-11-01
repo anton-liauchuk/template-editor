@@ -127,6 +127,7 @@
             <!--<p:outputPanel id="footer" style="height: #{editor.template.footer.height}px; border: 1px solid #666666;"/>-->
         </p:outputPanel>
         <p:commandButton onclick="findAllPositions(); updateRestrictPanel(JSON.stringify({comps: comps}))" global="false" action="#{editor.save}" value="Save"/>
+        <h:commandButton value="Create PDF" action="#{editor.createPDF}"/>
     </h:form>
 
     <ui:include src="/normalPanelDialog.xhtml" />

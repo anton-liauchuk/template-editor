@@ -9,10 +9,80 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head>
+    <h:outputStylesheet>
+        div.header {
+            display: block;
+            text-align: center;
+            position: running(header);
+        }
+
+        div.footer {
+            display: block;
+            text-align: center;
+            position: running(footer);
+        }
+
+        div.content {
+            page-break-after: always;
+        }
+
+        @page{
+            margin:0;
+            padding:0;
+        }
+
+        @page {
+            @top-center {
+                content: element(header)
+            }
+        }
+
+        @page {
+            @bottom-center {
+                content: element(footer)
+            }
+        }
+
+        /*@page { size: A3 landscape;}*/
+
+        .main-layout {
+            position: relative;
+            width: 21cm;
+            height: 29.7cm;
+        }
+
+        .draggable-panel {
+            position: absolute;
+        }
+
+        *, body {
+            margin: 0;
+            padding: 0;
+        }
+    </h:outputStylesheet>
     <title>PDF Template</title>
 </h:head>
 
 <h:body>
-    <h:outputText value="Test text"/>
+    <p:outputPanel id="restrictPanel" layout="block" styleClass="main-layout">
+        <!--<div class='header'>Header</div>-->
+        <!--<div class='footer'>Footer</div>-->
+        <!--<div class='content'>Page1</div>-->
+
+        <ui:repeat value="#{editor.editableElements}" var="editableElement" varStatus="status">
+            <p:panel style="left: #{editableElement.left}%; top: #{editableElement.top}%; width: #{editableElement.width}%; height: #{editableElement.height}%;"
+                     styleClass="draggable-panel draggablePanel#{status.index}">
+                <ui:fragment rendered="#{editableElement['class'].simpleName eq 'NormalPanel'}">
+                    <h:outputText value="#{editableElement.text}"/>
+                </ui:fragment>
+                <ui:fragment rendered="#{editableElement['class'].simpleName eq 'PositionTable'}">
+                    <p:dataTable>
+                        <p:columns value="#{editableElement.columnConfigs}" var="columnConfig" rendered="#{columnConfig.enabled}" headerText="#{columnConfig.title}"/>
+                    </p:dataTable>
+                </ui:fragment>
+            </p:panel>
+        </ui:repeat>
+
+    </p:outputPanel>
 </h:body>
 </html>

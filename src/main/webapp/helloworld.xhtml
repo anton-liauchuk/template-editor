@@ -27,7 +27,8 @@
             width: 800px;
             height: 800px;
             border: 1px solid #666666;
-            margin-bottom: 20px
+            margin-bottom: 20px;
+            position: relative;
         }
 
         .draggable-panel {
@@ -57,15 +58,16 @@
 
         function findAllPositions(){
             comps = [];
+            var editablePage = $('.editable-page');
             $(".draggable-panel").each(function() {
                 var index = ($(this).attr('class').split('draggablePanel')[1]).charAt(0);
                 draggableComponent = {
                     index: index,
                     name: "draggablePanel",
-                    left: $(this).css("left").replace("px", ""),
-                    top: $(this).css("top").replace("px", ""),
-                    width: $(this).css("width").replace("px", ""),
-                    height: $(this).css("height").replace("px", "")
+                    left: $(this).css("left").replace("px", "") / editablePage.css("width").replace("px", "") * 100,
+                    top: $(this).css("top").replace("px", "") / editablePage.css("height").replace("px", "") * 100,
+                    width: $(this).css("width").replace("px", "") / editablePage.css("width").replace("px", "") * 100,
+                    height: $(this).css("height").replace("px", "") / editablePage.css("height").replace("px", "") * 100
                 };
                 comps.push(draggableComponent);
             });
@@ -85,7 +87,7 @@
             <!--<p:outputPanel id="header" style="height: #{editor.template.header.height}px; border: 1px solid #666666;"/>-->
             <p:dataList rowIndexVar="listRowIndex" value="#{editor.editableElements}" var="editableElement" varStatus="status">
                 <p:panel id="draggablePanel"
-                              style="left: #{editableElement.left}px; top: #{editableElement.top}px; width: #{editableElement.width}px; height: #{editableElement.height}px;"
+                              style="left: #{editableElement.left}%; top: #{editableElement.top}%; width: #{editableElement.width}%; height: #{editableElement.height}%;"
                               styleClass="draggable-panel draggablePanel#{listRowIndex}">
                     <ui:fragment rendered="#{editableElement['class'].simpleName eq 'NormalPanel'}">
                         <h:outputText value="#{editableElement.text}"/>

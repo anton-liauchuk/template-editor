@@ -48,7 +48,7 @@
         .main-layout {
             position: relative;
             width: 21cm;
-            height: 29.7cm;
+            min-height: 29.7cm;
         }
 
         .draggable-panel {
@@ -59,25 +59,36 @@
             margin: 0;
             padding: 0;
         }
+
+        html, body {
+            height: 100%;
+        }
     </h:outputStylesheet>
     <title>PDF Template</title>
 </h:head>
 
 <h:body>
     <p:outputPanel id="restrictPanel" layout="block" styleClass="main-layout">
+        <p:importEnum type="com.codenotfound.primefaces.ColumnType" var="ColumnTypes"/>
         <!--<div class='header'>Header</div>-->
         <!--<div class='footer'>Footer</div>-->
         <!--<div class='content'>Page1</div>-->
 
         <ui:repeat value="#{editor.editableElements}" var="editableElement" varStatus="status">
-            <p:panel style="left: #{editableElement.left}%; top: #{editableElement.top}%; width: #{editableElement.width}%; height: #{editableElement.height}%;"
+            <p:panel style="left: #{editableElement.left}%; top: #{editableElement.top}%; width: #{editableElement.width}%; min-height: #{editableElement.height}%;"
                      styleClass="draggable-panel draggablePanel#{status.index}">
                 <ui:fragment rendered="#{editableElement['class'].simpleName eq 'NormalPanel'}">
                     <h:outputText value="#{editableElement.text}"/>
                 </ui:fragment>
                 <ui:fragment rendered="#{editableElement['class'].simpleName eq 'PositionTable'}">
-                    <p:dataTable>
-                        <p:columns value="#{editableElement.columnConfigs}" var="columnConfig" rendered="#{columnConfig.enabled}" headerText="#{columnConfig.title}"/>
+
+                    <p:dataTable var="invoicePosition" value="#{editor.invoicePositions}">
+                        <p:columns value="#{editableElement.displayedColumns}" var="columnModel">
+                            <f:facet name="header">
+                                <h:outputText value="#{columnModel.header}" />
+                            </f:facet>
+                            <h:outputText value="#{invoicePosition[columnModel.property]}" />
+                        </p:columns>
                     </p:dataTable>
                 </ui:fragment>
             </p:panel>

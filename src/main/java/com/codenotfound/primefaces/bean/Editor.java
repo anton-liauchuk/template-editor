@@ -1,10 +1,8 @@
 package com.codenotfound.primefaces.bean;
 
-import com.codenotfound.primefaces.ComponentList;
-import com.codenotfound.primefaces.DraggableComponent;
-import com.codenotfound.primefaces.EditableElement;
-import com.codenotfound.primefaces.Template;
+import com.codenotfound.primefaces.*;
 import com.codenotfound.primefaces.converter.EditableElementConverter;
+import com.codenotfound.primefaces.util.InvoicePositionUtils;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import javax.annotation.PostConstruct;
@@ -21,64 +19,78 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.OutputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @ManagedBean
 @ViewScoped
 public class Editor {
 
-  @EJB
-  private EditableElementConverter editableElementConverter;
+    @EJB
+    private EditableElementConverter editableElementConverter;
 
-  private Template template;
-  private List<EditableElement> editableElements;
-  private List<DraggableComponent> draggableComponents;
+    private Template template;
+    private List<EditableElement> editableElements;
+    private List<DraggableComponent> draggableComponents;
+    private List<InvoicePosition> invoicePositions;
 
-  @PostConstruct
-  public void init() {
-    editableElements = new ArrayList<>();
-    File file = new File("/home/lev/projects/template-editor/src/main/resources/template.xml");
+    @PostConstruct
+    public void init() {
+        editableElements = new ArrayList<>();
+        File file = new File("/home/lev/projects/template-editor/src/main/resources/template.xml");
 
-    Unmarshaller jaxbUnmarshaller;
-    try {
-      JAXBContext jaxbContext = JAXBContext.newInstance(Template.class);
-      jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-      template = (Template) jaxbUnmarshaller.unmarshal(file);
-      editableElements = template.getEditablePage().getEditableElements();
-    } catch (JAXBException e) {
-      e.printStackTrace();
-    }
-  }
+        Unmarshaller jaxbUnmarshaller;
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(Template.class);
+            jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            template = (Template) jaxbUnmarshaller.unmarshal(file);
+            editableElements = template.getEditablePage().getEditableElements();
+            invoicePositions = InvoicePositionUtils.generate(2);
 
-  public void sendPositions(ComponentList comps) {
-    draggableComponents = comps.getComps();
-  }
-
-  public void save() {
-    editableElements = editableElementConverter.convert(draggableComponents, editableElements);
-    File file = new File("/home/lev/projects/template-editor/src/main/resources/template.xml");
-    JAXBContext jaxbContext;
-    try {
-      jaxbContext = JAXBContext.newInstance(Template.class);
-      Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-
-      jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-      jaxbMarshaller.marshal(template, file);
-    } catch (JAXBException e) {
-      e.printStackTrace();
+            for (EditableElement editableElement : editableElements) {
+                if (editableElement instanceof PositionTable) {
+                    PositionTable positionTable = (PositionTable) editableElement;
+                    List<ColumnModel> displayedColumns = positionTable.getColumnConfigs().stream()
+                            .filter(PositionTableColumnConfig::getEnabled)
+                            .sorted(Comparator.comparingInt(PositionTableColumnConfig::getOrder))
+                            .map(columnConfig -> new ColumnModel(columnConfig.getTitle(), columnConfig.getColumnType().getField()))
+                            .collect(Collectors.toList());
+                    positionTable.setDisplayedColumns(displayedColumns);
+                }
+            }
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
     }
 
-  }
+    public void sendPositions(ComponentList comps) {
+        draggableComponents = comps.getComps();
+    }
+
+    public void save() {
+        editableElements = editableElementConverter.convert(draggableComponents, editableElements);
+        File file = new File("/home/lev/projects/template-editor/src/main/resources/template.xml");
+        JAXBContext jaxbContext;
+        try {
+            jaxbContext = JAXBContext.newInstance(Template.class);
+            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            jaxbMarshaller.marshal(template, file);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public void createPDF() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ExternalContext externalContext = facesContext.getExternalContext();
-        String servername = externalContext.getRequestServerName();
+        String serverName = externalContext.getRequestServerName();
         String port = String.valueOf(externalContext.getRequestServerPort());
-        String appname = externalContext.getRequestContextPath();
+        String appName = externalContext.getRequestContextPath();
         String protocol = externalContext.getRequestScheme();
-        String url = protocol + "://" + servername + ":" + port + appname + "/pdfTemplate.xhtml";
+        String url = protocol + "://" + serverName + ":" + port + appName + "/pdfTemplate.xhtml";
         try {
             ITextRenderer renderer = new ITextRenderer();
             renderer.setDocument(new URL(url).toString());
@@ -96,11 +108,15 @@ public class Editor {
         facesContext.responseComplete();
     }
 
-  public List<EditableElement> getEditableElements() {
-    return editableElements;
-  }
+    public List<EditableElement> getEditableElements() {
+        return editableElements;
+    }
 
-  public Template getTemplate() {
-    return template;
-  }
+    public Template getTemplate() {
+        return template;
+    }
+
+    public List<InvoicePosition> getInvoicePositions() {
+        return invoicePositions;
+    }
 }

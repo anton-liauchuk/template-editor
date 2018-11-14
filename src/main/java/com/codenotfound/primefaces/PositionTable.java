@@ -9,6 +9,15 @@ import java.util.List;
 public class PositionTable extends EditableElement {
 
     private List<PositionTableColumnConfig> columnConfigs;
+    private List<ColumnModel> displayedColumns;
+
+    public List<ColumnModel> getDisplayedColumns() {
+        return displayedColumns;
+    }
+
+    public void setDisplayedColumns(List<ColumnModel> displayedColumns) {
+        this.displayedColumns = displayedColumns;
+    }
 
     public List<PositionTableColumnConfig> getColumnConfigs() {
         return columnConfigs;

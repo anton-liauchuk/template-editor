@@ -94,7 +94,7 @@
                     </ui:fragment>
                     <ui:fragment rendered="#{editableElement['class'].simpleName eq 'PositionTable'}">
                         <p:dataTable>
-                            <p:columns value="#{editableElement.columnConfigs}" var="columnConfig" rendered="#{columnConfig.enabled}" headerText="#{columnConfig.title}"/>
+                            <p:columns value="#{editableElement.columnConfigs}" var="columnModel" rendered="#{columnModel.enabled}" headerText="#{columnModel.title}"/>
                         </p:dataTable>
                     </ui:fragment>
                 </p:panel>

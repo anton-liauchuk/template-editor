@@ -51,10 +51,6 @@
             min-height: 29.7cm;
         }
 
-        .draggable-panel {
-            position: absolute;
-        }
-
         *, body {
             margin: 0;
             padding: 0;
@@ -62,6 +58,10 @@
 
         html, body {
             height: 100%;
+        }
+
+        .previewPanel {
+            border: none;
         }
     </h:outputStylesheet>
     <title>PDF Template</title>
@@ -74,15 +74,15 @@
         <!--<div class='footer'>Footer</div>-->
         <!--<div class='content'>Page1</div>-->
 
-        <ui:repeat value="#{editor.editableElements}" var="editableElement" varStatus="status">
-            <p:panel style="left: #{editableElement.left}%; top: #{editableElement.top}%; width: #{editableElement.width}%; min-height: #{editableElement.height}%;"
-                     styleClass="draggable-panel draggablePanel#{status.index}">
+        <ui:repeat value="#{templatePreview.editableElements}" var="editableElement" varStatus="status">
+            <p:panel style="margin-left: #{editableElement.left}%; margin-top: #{editableElement.top}%; width: #{editableElement.width}%; min-height: #{editableElement.height}%;"
+                     styleClass="previewPanel draggablePanel#{status.index}">
                 <ui:fragment rendered="#{editableElement['class'].simpleName eq 'NormalPanel'}">
                     <h:outputText value="#{editableElement.text}"/>
                 </ui:fragment>
                 <ui:fragment rendered="#{editableElement['class'].simpleName eq 'PositionTable'}">
 
-                    <p:dataTable var="invoicePosition" value="#{editor.invoicePositions}">
+                    <p:dataTable var="invoicePosition" value="#{templatePreview.invoicePositions}">
                         <p:columns value="#{editableElement.displayedColumns}" var="columnModel">
                             <f:facet name="header">
                                 <h:outputText value="#{columnModel.header}" />

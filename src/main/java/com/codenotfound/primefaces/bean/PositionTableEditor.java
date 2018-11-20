@@ -1,5 +1,6 @@
 package com.codenotfound.primefaces.bean;
 
+import com.codenotfound.primefaces.ColumnModel;
 import com.codenotfound.primefaces.ColumnType;
 import com.codenotfound.primefaces.PositionTable;
 import com.codenotfound.primefaces.PositionTableColumnConfig;
@@ -8,6 +9,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,10 +35,12 @@ public class PositionTableEditor {
 
     public void save() {
         positionTable.getColumnConfigs().forEach(config -> config.setEnabled(selectedColumns.contains(config.getColumnType())));
-    }
-
-    public PositionTable getPositionTable() {
-        return positionTable;
+        List<ColumnModel> displayedColumns = positionTable.getColumnConfigs().stream()
+                .filter(PositionTableColumnConfig::getEnabled)
+                .sorted(Comparator.comparingInt(PositionTableColumnConfig::getOrder))
+                .map(columnConfig -> new ColumnModel(columnConfig.getTitle(), columnConfig.getColumnType().getField()))
+                .collect(Collectors.toList());
+        positionTable.setDisplayedColumns(displayedColumns);
     }
 
     public List<SelectItem> getConfigs() {

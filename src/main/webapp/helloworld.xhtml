@@ -50,6 +50,10 @@
         .ui-datalist-content ul {
             list-style-type: none;
         }
+
+        .template-editor-form {
+            display: inline-block;
+        }
     </h:outputStylesheet>
 
     <script  type="text/javascript">
@@ -74,7 +78,7 @@
         }
     </script>
 
-    <h:form>
+    <h:form styleClass="template-editor-form" prependId="false">
 
         <pe:remoteCommand id="applyDataCommand" name="updateRestrictPanel" actionListener="#{editor.sendPositions}">
             <pe:methodSignature parameters="com.codenotfound.primefaces.ComponentList" />
@@ -103,7 +107,7 @@
                     </ui:fragment>
                 </p:panel>
                 <p:resizable for="draggablePanel"/>
-                <p:draggable for="draggablePanel" containment="restrictPanel"/>
+                <p:draggable for="draggablePanel" containment="#restrictPanel"/>
                 <p:tooltip id="toolTipFade" value="Test asadasdasdasd" position="top" for="draggablePanel">
                     <p:commandLink action="#{normalPanelEditor.reset(editableElement)}"
                                    value="Edit Normal Panel"

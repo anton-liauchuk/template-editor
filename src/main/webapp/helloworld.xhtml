@@ -54,6 +54,11 @@
         .template-editor-form {
             display: inline-block;
         }
+
+        .resizable-containment {
+            width: 100%;
+            height: 100%;
+        }
     </h:outputStylesheet>
 
     <script  type="text/javascript">
@@ -89,7 +94,7 @@
 
         <p:outputPanel id="restrictPanel" layout="block" styleClass="editable-page">
             <!--<p:outputPanel id="header" style="height: #{editor.template.header.height}px; border: 1px solid #666666;"/>-->
-            <p:dataList rowIndexVar="listRowIndex" value="#{editor.editableElements}" var="editableElement" varStatus="status">
+            <p:dataList styleClass="resizable-containment" rowIndexVar="listRowIndex" value="#{editor.editableElements}" var="editableElement" varStatus="status">
                 <p:panel id="draggablePanel"
                               style="left: #{editableElement.left}%; top: #{editableElement.top}%; width: #{editableElement.width}%; height: #{editableElement.height}%;"
                               styleClass="draggable-panel draggablePanel#{listRowIndex}">
@@ -106,7 +111,7 @@
                         </p:dataTable>
                     </ui:fragment>
                 </p:panel>
-                <p:resizable for="draggablePanel"/>
+                <p:resizable for="draggablePanel" containment="true"/>
                 <p:draggable for="draggablePanel" containment="#restrictPanel"/>
                 <p:tooltip id="toolTipFade" value="Test asadasdasdasd" position="top" for="draggablePanel">
                     <p:commandLink action="#{normalPanelEditor.reset(editableElement)}"

@@ -59,6 +59,11 @@
             width: 100%;
             height: 100%;
         }
+
+        .draggable-panel .ui-panel-content, .draggable-panel, .position-table {
+            padding: 0;
+            margin: 0;
+        }
     </h:outputStylesheet>
 
     <script  type="text/javascript">
@@ -102,7 +107,7 @@
                         <h:outputText value="#{editableElement.text}"/>
                     </ui:fragment>
                     <ui:fragment rendered="#{editableElement['class'].simpleName eq 'PositionTable'}">
-                        <p:dataTable>
+                        <p:dataTable styleClass="position-table">
                             <p:columns value="#{editableElement.displayedColumns}" var="columnModel">
                                 <f:facet name="header">
                                     <h:outputText value="#{columnModel.header}" />
@@ -113,7 +118,8 @@
                 </p:panel>
                 <p:resizable for="draggablePanel" containment="true"/>
                 <p:draggable for="draggablePanel" containment="#restrictPanel"/>
-                <p:tooltip id="toolTipFade" value="Test asadasdasdasd" position="top" for="draggablePanel">
+
+                <p:overlayPanel id="overlayPanel" for="draggablePanel" showEvent="mouseover" dismissable="true">
                     <p:commandLink action="#{normalPanelEditor.reset(editableElement)}"
                                    value="Edit Normal Panel"
                                    update=":normalPanelForm"
@@ -124,7 +130,7 @@
                                    update=":positionTableForm"
                                    rendered="#{editableElement['class'].simpleName eq 'PositionTable'}"
                                    oncomplete="PF('positionTableEditorDlg').show()"/>
-                </p:tooltip>
+                </p:overlayPanel>
                 <!--<ui:fragment rendered="#{editableElement['class'].simpleName eq 'NormalPanel'}">
                     <ui:include src="normalPanel.xhtml">
                         <ui:param name="editableElement" value="#{editableElement}"/>

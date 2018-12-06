@@ -5,103 +5,136 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:pe="http://primefaces.org/ui/extensions"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head>
     <h:outputStylesheet>
-        div.header {
-            display: block;
-            text-align: center;
-            position: running(header);
-        }
-
-        div.footer {
-            display: block;
-            text-align: center;
-            position: running(footer);
-        }
-
-        div.content {
-            page-break-after: always;
-        }
-
         @page{
-            margin:0;
-            padding:0;
-        }
-
-        @page {
-            @top-center {
-                content: element(header)
-            }
-        }
-
-        @page {
-            @bottom-center {
-                content: element(footer)
-            }
-        }
-
-        /*@page { size: A3 landscape;}*/
-
-        .main-layout {
-            position: relative;
+            padding:0 !important;
+            margin: #{templatePreview.pageFixedTop/100 * 29.7}cm 0 #{templatePreview.pageFixedBottom/100 * 29.7}cm 0;
+            size: A4;
             width: 21cm;
-            min-height: 29.7cm;
+            height: 29.7cm;
         }
 
-        *, body {
-            margin: 0;
-            padding: 0;
+        body {
+            position: relative;
         }
 
         html, body {
-            height: 100%;
+            padding: 0;
+            margin: 0;
+            width: 21cm;
+            height: 29.7cm;
         }
 
         .ui-panel.previewPanel {
             border: none;
             margin: 0;
             padding: 0;
-            word-wrap: break-word
+            word-wrap: break-word;
         }
 
         .ui-panel.previewPanel .ui-panel-content {
             margin: 0;
             padding: 0;
         }
+
+        div.header {
+            display: block;
+            position: running(header);
+        }
+        div.footer {
+            display: block !important;
+            position: running(footer);
+        }
+        @page {
+            @top-center {
+                content: element(header);
+            }
+        }
+        @page {
+            @bottom-center {
+                content: element(footer);
+            }
+        }
     </h:outputStylesheet>
     <title>PDF Template</title>
 </h:head>
 
 <h:body>
-    <p:outputPanel id="restrictPanel" layout="block" styleClass="main-layout">
-        <p:importEnum type="com.codenotfound.primefaces.ColumnType" var="ColumnTypes"/>
-        <!--<div class='header'>Header</div>-->
-        <!--<div class='footer'>Footer</div>-->
-        <!--<div class='content'>Page1</div>-->
-
-        <ui:repeat value="#{templatePreview.editableElements}" var="editableElement" varStatus="status">
-            <p:panel style="margin-left: #{editableElement.left}%; margin-top: #{editableElement.top}%; width: #{editableElement.width}%; min-height: #{editableElement.height}%;"
-                     styleClass="previewPanel draggablePanel#{status.index}">
+    <p:importEnum type="com.codenotfound.primefaces.ColumnType" var="ColumnTypes"/>
+    <div class="header" style="height: #{templatePreview.pageFixedTop/100 * 29.7}cm">
+        <ui:repeat value="#{templatePreview.positionedElements['header']}" var="editableElement" varStatus="status">
+            <p:panel style="left: #{editableElement.left/100 * 21}cm;
+                         top: #{editableElement.top/100 * 29.7}cm;
+                         position: absolute;
+                         width: #{editableElement.width/100 * 21}cm;
+                         height: #{editableElement.height/100 * 29.7}cm;"
+                     styleClass="previewPanel">
                 <ui:fragment rendered="#{editableElement['class'].simpleName eq 'NormalPanel'}">
-                    <h:outputText value="#{editableElement.text}"/>
+                    <h:outputText value="#{editableElement.text}" escape="false"/>
                 </ui:fragment>
                 <ui:fragment rendered="#{editableElement['class'].simpleName eq 'PositionTable'}">
-
                     <p:dataTable var="invoicePosition" value="#{templatePreview.invoicePositions}">
                         <p:columns value="#{editableElement.displayedColumns}" var="columnModel">
                             <f:facet name="header">
-                                <h:outputText value="#{columnModel.header}" />
+                                <h:outputText value="#{columnModel.header}"/>
                             </f:facet>
-                            <h:outputText value="#{invoicePosition[columnModel.property]}" />
+                            <h:outputText value="#{invoicePosition[columnModel.property]}"/>
                         </p:columns>
                     </p:dataTable>
                 </ui:fragment>
             </p:panel>
         </ui:repeat>
+    </div>
 
-    </p:outputPanel>
+    <ui:repeat value="#{templatePreview.positionedElements['content']}" var="editableElement" varStatus="status">
+        <p:panel style="margin-left: #{editableElement.left}%;
+                     width: #{editableElement.width/100 * 21}cm;
+                     height: #{editableElement.height/100 * 29.7 - 0.2}cm;"
+                 styleClass="previewPanel">
+            <ui:fragment rendered="#{editableElement['class'].simpleName eq 'NormalPanel'}">
+                <h:outputText value="#{editableElement.text}" escape="false"/>
+            </ui:fragment>
+            <ui:fragment rendered="#{editableElement['class'].simpleName eq 'PositionTable'}">
+
+                <p:dataTable var="invoicePosition" value="#{templatePreview.invoicePositions}">
+                    <p:columns value="#{editableElement.displayedColumns}" var="columnModel">
+                        <f:facet name="header">
+                            <h:outputText value="#{columnModel.header}"/>
+                        </f:facet>
+                        <h:outputText value="#{invoicePosition[columnModel.property]}"/>
+                    </p:columns>
+                </p:dataTable>
+            </ui:fragment>
+        </p:panel>
+    </ui:repeat>
+
+    <div class="footer" style="height: #{templatePreview.pageFixedBottom/100 * 29.7}cm">
+        <ui:repeat value="#{templatePreview.positionedElements['footer']}" var="editableElement" varStatus="status">
+            <p:panel style="left: #{editableElement.left/100 * 21}cm;
+                     top: #{templatePreview.pageFixedBottom/100 * 29.7 - (29.7 - editableElement.top/100 * 29.7)}cm;
+                     position: absolute;
+                     width: #{editableElement.width/100 * 21}cm;
+                     height: #{editableElement.height/100 * 29.7}cm;"
+                     styleClass="previewPanel">
+                <ui:fragment rendered="#{editableElement['class'].simpleName eq 'NormalPanel'}">
+                    <h:outputText value="#{editableElement.text}" escape="false"/>
+                </ui:fragment>
+                <ui:fragment rendered="#{editableElement['class'].simpleName eq 'PositionTable'}">
+                    <p:dataTable var="invoicePosition" value="#{templatePreview.invoicePositions}">
+                        <p:columns value="#{editableElement.displayedColumns}" var="columnModel">
+                            <f:facet name="header">
+                                <h:outputText value="#{columnModel.header}"/>
+                            </f:facet>
+                            <h:outputText value="#{invoicePosition[columnModel.property]}"/>
+                        </p:columns>
+                    </p:dataTable>
+                </ui:fragment>
+            </p:panel>
+        </ui:repeat>
+    </div>
+
 </h:body>
 </html>

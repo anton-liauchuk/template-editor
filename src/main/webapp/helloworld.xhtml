@@ -104,7 +104,7 @@
                               style="left: #{editableElement.left}%; top: #{editableElement.top}%; width: #{editableElement.width}%; height: #{editableElement.height}%;"
                               styleClass="draggable-panel draggablePanel#{listRowIndex}">
                     <ui:fragment rendered="#{editableElement['class'].simpleName eq 'NormalPanel'}">
-                        <h:outputText value="#{editableElement.text}"/>
+                        <h:outputText value="#{editableElement.text}" escape="false"/>
                     </ui:fragment>
                     <ui:fragment rendered="#{editableElement['class'].simpleName eq 'PositionTable'}">
                         <p:dataTable styleClass="position-table">

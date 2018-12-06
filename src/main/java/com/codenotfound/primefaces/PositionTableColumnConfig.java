@@ -1,12 +1,12 @@
 package com.codenotfound.primefaces;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 public class PositionTableColumnConfig {
 
     private String title;
     private Integer order;
+    private Integer width;
     private Boolean enabled;
     private ColumnType columnType;
 
@@ -26,6 +26,15 @@ public class PositionTableColumnConfig {
     @XmlElement
     public void setOrder(Integer order) {
         this.order = order;
+    }
+
+    public Integer getWidth() {
+        return width;
+    }
+
+    @XmlElement
+    public void setWidth(Integer width) {
+        this.width = width;
     }
 
     public Boolean getEnabled() {

@@ -13,14 +13,21 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @ManagedBean
 @ViewScoped
 public class TemplatePreview {
 
     private List<EditableElement> editableElements;
+    private Map<String, List<EditableElement>> positionedElements;
     private List<InvoicePosition> invoicePositions;
+    private Double pageFixedTop;
+    private Double pageFixedBottom;
 
     @PostConstruct
     public void init() {
@@ -33,6 +40,7 @@ public class TemplatePreview {
             jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             Template template = (Template) jaxbUnmarshaller.unmarshal(file);
             editableElements = template.getEditablePage().getEditableElements();
+            positionedElements = editableElements.stream().collect(groupingBy(EditableElement::getPosition));
             invoicePositions = InvoicePositionUtils.generate(2);
 
             for (EditableElement editableElement : editableElements) {
@@ -48,16 +56,10 @@ public class TemplatePreview {
             }
 
             editableElements.sort(Comparator.comparingDouble(EditableElement::getTop));
-            for (int i = 0; i < editableElements.size(); i++) {
-                if (i == 0) {
-                    continue;
-                }
 
-                EditableElement previousElement = editableElements.get(i - 1);
-                Double previousBottom = previousElement.getHeight() + previousElement.getTop();
-                EditableElement currentElement = editableElements.get(i);
-                currentElement.setTop(currentElement.getTop() - previousBottom);
-            }
+            List<EditableElement> contentElements = positionedElements.get("content");
+            pageFixedTop = contentElements.get(0).getTop();
+            pageFixedBottom = 100 - (contentElements.get(contentElements.size() - 1).getTop() + contentElements.get(contentElements.size() - 1).getHeight());
         } catch (JAXBException e) {
             e.printStackTrace();
         }
@@ -69,5 +71,25 @@ public class TemplatePreview {
 
     public List<InvoicePosition> getInvoicePositions() {
         return invoicePositions;
+    }
+
+    public Double getPageFixedTop() {
+        return pageFixedTop;
+    }
+
+    public void setPageFixedTop(Double pageFixedTop) {
+        this.pageFixedTop = pageFixedTop;
+    }
+
+    public Double getPageFixedBottom() {
+        return pageFixedBottom;
+    }
+
+    public void setPageFixedBottom(Double pageFixedBottom) {
+        this.pageFixedBottom = pageFixedBottom;
+    }
+
+    public Map<String, List<EditableElement>> getPositionedElements() {
+        return positionedElements;
     }
 }

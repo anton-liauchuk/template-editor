@@ -12,6 +12,7 @@ public class EditableElement {
     private Double height;
     private Double left;
     private Double top;
+    private String position;
 
     public Double getWidth() {
         return width;
@@ -47,5 +48,13 @@ public class EditableElement {
     @XmlElement
     public void setTop(Double top) {
         this.top = top;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 }

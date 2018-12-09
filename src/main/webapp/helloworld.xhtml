@@ -115,7 +115,7 @@
                     </ui:fragment>
                     <ui:fragment rendered="#{editableElement['class'].simpleName eq 'PositionTable'}">
                         <p:dataTable styleClass="position-table">
-                            <p:columns value="#{editableElement.displayedColumns}" var="columnModel">
+                            <p:columns value="#{editableElement.displayedColumns}" style="text-align: #{columnModel.alignment}" var="columnModel">
                                 <f:facet name="header">
                                     <h:outputText value="#{columnModel.header}" />
                                 </f:facet>

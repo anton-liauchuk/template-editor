@@ -8,6 +8,7 @@ public class PositionTableColumnConfig {
     private Integer order;
     private Integer width;
     private Boolean enabled;
+    private String alignment;
     private ColumnType columnType;
 
     public String getTitle() {
@@ -44,6 +45,15 @@ public class PositionTableColumnConfig {
     @XmlElement
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getAlignment() {
+        return alignment;
+    }
+
+    @XmlElement
+    public void setAlignment(String alignment) {
+        this.alignment = alignment;
     }
 
     public ColumnType getColumnType() {

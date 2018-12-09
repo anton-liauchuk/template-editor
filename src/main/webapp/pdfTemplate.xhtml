@@ -85,7 +85,7 @@
                 </ui:fragment>
                 <ui:fragment rendered="#{editableElement['class'].simpleName eq 'PositionTable'}">
                     <p:dataTable var="invoicePosition" value="#{templatePreview.invoicePositions}">
-                        <p:columns value="#{editableElement.displayedColumns}" var="columnModel">
+                        <p:columns value="#{editableElement.displayedColumns}" style="text-align: #{columnModel.alignment}" var="columnModel">
                             <f:facet name="header">
                                 <h:outputText value="#{columnModel.header}"/>
                             </f:facet>
@@ -108,7 +108,7 @@
             <ui:fragment rendered="#{editableElement['class'].simpleName eq 'PositionTable'}">
 
                 <p:dataTable var="invoicePosition" value="#{templatePreview.invoicePositions}">
-                    <p:columns value="#{editableElement.displayedColumns}" var="columnModel">
+                    <p:columns value="#{editableElement.displayedColumns}" style="text-align: #{columnModel.alignment}" var="columnModel">
                         <f:facet name="header">
                             <h:outputText value="#{columnModel.header}"/>
                         </f:facet>
@@ -136,7 +136,7 @@
                 </ui:fragment>
                 <ui:fragment rendered="#{editableElement['class'].simpleName eq 'PositionTable'}">
                     <p:dataTable var="invoicePosition" value="#{templatePreview.invoicePositions}">
-                        <p:columns value="#{editableElement.displayedColumns}" var="columnModel">
+                        <p:columns value="#{editableElement.displayedColumns}" style="text-align: #{columnModel.alignment}" var="columnModel">
                             <f:facet name="header">
                                 <h:outputText value="#{columnModel.header}"/>
                             </f:facet>

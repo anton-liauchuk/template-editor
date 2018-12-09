@@ -38,7 +38,7 @@ public class PositionTableEditor {
         List<ColumnModel> displayedColumns = positionTable.getColumnConfigs().stream()
                 .filter(PositionTableColumnConfig::getEnabled)
                 .sorted(Comparator.comparingInt(PositionTableColumnConfig::getOrder))
-                .map(columnConfig -> new ColumnModel(columnConfig.getTitle(), columnConfig.getColumnType().getField()))
+                .map(columnConfig -> new ColumnModel(columnConfig.getTitle(), columnConfig.getColumnType().getField(), columnConfig.getAlignment()))
                 .collect(Collectors.toList());
         positionTable.setDisplayedColumns(displayedColumns);
     }

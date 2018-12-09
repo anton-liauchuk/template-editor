@@ -4,13 +4,15 @@ public class ColumnModel {
 
     private String header;
     private String property;
+    private String alignment;
 
     public ColumnModel() {
     }
 
-    public ColumnModel(String header, String property) {
+    public ColumnModel(String header, String property, String alignment) {
         this.header = header;
         this.property = property;
+        this.alignment = alignment;
     }
 
     public String getHeader() {
@@ -21,4 +23,7 @@ public class ColumnModel {
         return property;
     }
 
+    public String getAlignment() {
+        return alignment;
+    }
 }

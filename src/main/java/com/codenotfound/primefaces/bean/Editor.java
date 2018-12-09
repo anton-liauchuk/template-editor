@@ -2,7 +2,6 @@ package com.codenotfound.primefaces.bean;
 
 import com.codenotfound.primefaces.*;
 import com.codenotfound.primefaces.converter.EditableElementConverter;
-import com.codenotfound.primefaces.util.InvoicePositionUtils;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import javax.annotation.PostConstruct;
@@ -32,7 +31,6 @@ public class Editor {
     private Template template;
     private List<EditableElement> editableElements;
     private List<DraggableComponent> draggableComponents;
-    private List<InvoicePosition> invoicePositions;
 
     @PostConstruct
     public void init() {
@@ -45,7 +43,6 @@ public class Editor {
             jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             template = (Template) jaxbUnmarshaller.unmarshal(file);
             editableElements = template.getEditablePage().getEditableElements();
-            invoicePositions = InvoicePositionUtils.generate(2);
 
             for (EditableElement editableElement : editableElements) {
                 if (editableElement instanceof PositionTable) {
@@ -110,13 +107,5 @@ public class Editor {
 
     public List<EditableElement> getEditableElements() {
         return editableElements;
-    }
-
-    public Template getTemplate() {
-        return template;
-    }
-
-    public List<InvoicePosition> getInvoicePositions() {
-        return invoicePositions;
     }
 }

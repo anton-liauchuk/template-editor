@@ -7,7 +7,7 @@
 
     <p:dialog header="Normal Panel Editor" widgetVar="normalPanelEditorDlg" minHeight="40">
         <h:form id="normalPanelForm">
-            <p:editor id="normalPanelEditor" widgetVar="normalPanelEditor" value="#{normalPanelEditor.normalPanel.text}" width="600"/>
+            <p:textEditor id="normalPanelEditor" widgetVar="normalPanelEditor" value="#{normalPanelEditor.normalPanel.text}" width="600"/>
             <p:commandButton value="Submit"
                              update="@(.editable-page)"
                              oncomplete="PF('normalPanelEditorDlg').hide()"

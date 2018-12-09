@@ -102,7 +102,6 @@
         </pe:remoteCommand>
 
         <p:outputPanel id="restrictPanel" layout="block" styleClass="editable-page">
-            <!--<p:outputPanel id="header" style="height: #{editor.template.header.height}px; border: 1px solid #666666;"/>-->
             <p:dataList styleClass="resizable-containment" rowIndexVar="listRowIndex" value="#{editor.editableElements}" var="editableElement" varStatus="status">
                 <p:panel id="draggablePanel"
                               style="left: #{editableElement.left}%; top: #{editableElement.top}%; width: #{editableElement.width}%; height: #{editableElement.height}%;"
@@ -139,21 +138,7 @@
                 </p:panel>
                 <p:resizable for="draggablePanel" containment="true"/>
                 <p:draggable for="draggablePanel" containment="#restrictPanel"/>
-                <!--<ui:fragment rendered="#{editableElement['class'].simpleName eq 'NormalPanel'}">
-                    <ui:include src="normalPanel.xhtml">
-                        <ui:param name="editableElement" value="#{editableElement}"/>
-                        <ui:param name="status" value="#{status}"/>
-                    </ui:include>
-                </ui:fragment>
-                <ui:fragment rendered="#{editableElement['class'].simpleName eq 'PositionTable'}">
-                    <ui:include src="positionTable.xhtml">
-                        <ui:param name="editableElement" value="#{editableElement}"/>
-                        <ui:param name="status" value="#{status}"/>
-                    </ui:include>
-                </ui:fragment>-->
             </p:dataList>
-
-            <!--<p:outputPanel id="footer" style="height: #{editor.template.footer.height}px; border: 1px solid #666666;"/>-->
         </p:outputPanel>
         <p:commandButton onclick="findAllPositions(); updateRestrictPanel(JSON.stringify({comps: comps}))" global="false" action="#{editor.save}" value="Save"/>
         <h:commandButton value="Create PDF" action="#{editor.createPDF}"/>

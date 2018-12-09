@@ -123,22 +123,22 @@
                             </p:columns>
                         </p:dataTable>
                     </ui:fragment>
+
+                    <p:overlayPanel id="overlayPanel" for="draggablePanel" showEvent="mouseover" hideEvent="mouseout" dismissable="true">
+                        <p:commandLink action="#{normalPanelEditor.reset(editableElement)}"
+                                       value="Edit Normal Panel"
+                                       update=":normalPanelForm"
+                                       rendered="#{editableElement['class'].simpleName eq 'NormalPanel'}"
+                                       oncomplete="PF('normalPanelEditorDlg').show()"/>
+                        <p:commandLink action="#{positionTableEditor.reset(editableElement)}"
+                                       value="Edit Position Table"
+                                       update=":positionTableForm"
+                                       rendered="#{editableElement['class'].simpleName eq 'PositionTable'}"
+                                       oncomplete="PF('positionTableEditorDlg').show()"/>
+                    </p:overlayPanel>
                 </p:panel>
                 <p:resizable for="draggablePanel" containment="true"/>
                 <p:draggable for="draggablePanel" containment="#restrictPanel"/>
-
-                <p:overlayPanel id="overlayPanel" for="draggablePanel" showEvent="mouseover" dismissable="true">
-                    <p:commandLink action="#{normalPanelEditor.reset(editableElement)}"
-                                   value="Edit Normal Panel"
-                                   update=":normalPanelForm"
-                                   rendered="#{editableElement['class'].simpleName eq 'NormalPanel'}"
-                                   oncomplete="PF('normalPanelEditorDlg').show()"/>
-                    <p:commandLink action="#{positionTableEditor.reset(editableElement)}"
-                                   value="Edit Position Table"
-                                   update=":positionTableForm"
-                                   rendered="#{editableElement['class'].simpleName eq 'PositionTable'}"
-                                   oncomplete="PF('positionTableEditorDlg').show()"/>
-                </p:overlayPanel>
                 <!--<ui:fragment rendered="#{editableElement['class'].simpleName eq 'NormalPanel'}">
                     <ui:include src="normalPanel.xhtml">
                         <ui:param name="editableElement" value="#{editableElement}"/>

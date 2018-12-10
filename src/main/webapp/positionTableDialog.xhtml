@@ -7,9 +7,19 @@
 
     <p:dialog header="Position Table Editor" widgetVar="positionTableEditorDlg" minHeight="40">
         <h:form id="positionTableForm">
-            <p:selectManyCheckbox id="columnBox" value="#{positionTableEditor.selectedColumns}" layout="grid" columns="3">
-                <f:selectItems value="#{positionTableEditor.configs}" var="config" itemLabel="#{config}" itemValue="#{config}" />
+            <p:selectManyCheckbox id="columnBox" value="#{positionTableEditor.selectedColumns}" converter="#{positionTableEditor.columnConverter}" layout="grid" columns="3">
+                <f:selectItems value="#{positionTableEditor.configs}" var="config" itemLabel="#{config.title}" itemValue="#{config}" />
+                <p:ajax update="preview-position-table"/>
             </p:selectManyCheckbox>
+
+            <p:dataTable id="preview-position-table" value="#{positionTableEditor.selectedColumns}" var="columnTest" styleClass="position-table">
+                <p:columns value="#{positionTableEditor.selectedColumns}" style="text-align: #{columnConfig.alignment}" var="columnConfig">
+                    <f:facet name="header">
+                        <h:outputText value="#{columnConfig.title}" />
+                    </f:facet>
+                    <h:outputText value="#{columnTest.alignment}" />
+                </p:columns>
+            </p:dataTable>
 
             <p:commandButton value="Submit"
                              action="#{positionTableEditor.save}"

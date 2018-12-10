@@ -1,14 +1,12 @@
 package com.codenotfound.primefaces.bean;
 
 import com.codenotfound.primefaces.ColumnModel;
-import com.codenotfound.primefaces.ColumnType;
 import com.codenotfound.primefaces.PositionTable;
 import com.codenotfound.primefaces.PositionTableColumnConfig;
+import com.codenotfound.primefaces.converter.ColumnConverter;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.model.SelectItem;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,22 +17,22 @@ import java.util.stream.Collectors;
 public class PositionTableEditor {
 
     private PositionTable positionTable;
-    private List<SelectItem> configs;
-    private List<ColumnType> selectedColumns;
+    private List<PositionTableColumnConfig> configs;
+    private List<PositionTableColumnConfig> selectedColumns;
+    private ColumnConverter columnConverter;
 
     public void reset(PositionTable positionTable) {
         this.positionTable = positionTable;
-        configs = new ArrayList<>();
-        positionTable.getColumnConfigs().forEach(columnConfig -> configs.add(new SelectItem(columnConfig.getColumnType())));
+        configs = positionTable.getColumnConfigs();
         selectedColumns = positionTable.getColumnConfigs()
                 .stream()
                 .filter(PositionTableColumnConfig::getEnabled)
-                .map(PositionTableColumnConfig::getColumnType)
                 .collect(Collectors.toList());
+        columnConverter = new ColumnConverter(configs);
     }
 
     public void save() {
-        positionTable.getColumnConfigs().forEach(config -> config.setEnabled(selectedColumns.contains(config.getColumnType())));
+        positionTable.getColumnConfigs().forEach(config -> config.setEnabled(selectedColumns.contains(config)));
         List<ColumnModel> displayedColumns = positionTable.getColumnConfigs().stream()
                 .filter(PositionTableColumnConfig::getEnabled)
                 .sorted(Comparator.comparingInt(PositionTableColumnConfig::getOrder))
@@ -43,15 +41,19 @@ public class PositionTableEditor {
         positionTable.setDisplayedColumns(displayedColumns);
     }
 
-    public List<SelectItem> getConfigs() {
+    public List<PositionTableColumnConfig> getConfigs() {
         return configs;
     }
 
-    public List<ColumnType> getSelectedColumns() {
+    public List<PositionTableColumnConfig> getSelectedColumns() {
         return selectedColumns;
     }
 
-    public void setSelectedColumns(List<ColumnType> selectedColumns) {
+    public ColumnConverter getColumnConverter() {
+        return columnConverter;
+    }
+
+    public void setSelectedColumns(List<PositionTableColumnConfig> selectedColumns) {
         this.selectedColumns = selectedColumns;
     }
 }

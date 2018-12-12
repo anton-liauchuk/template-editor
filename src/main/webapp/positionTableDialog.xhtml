@@ -13,7 +13,8 @@
             </p:selectManyCheckbox>
 
             <p:dataTable id="preview-position-table" styleClass="position-table" draggableColumns="true" resizableColumns="true">
-                <p:ajax event="colReorder" listener="#{positionTableEditor.onRowReorder}" />
+                <p:ajax event="colReorder" listener="#{positionTableEditor.onColReorder}" />
+                <p:ajax event="colResize" listener="#{positionTableEditor.onResize}" />
                 <p:columns value="#{positionTableEditor.selectedColumns}" style="text-align: #{columnConfig.alignment}" var="columnConfig">
                     <f:facet name="header">
                         <h:outputText value="#{columnConfig.columnType.title}" />

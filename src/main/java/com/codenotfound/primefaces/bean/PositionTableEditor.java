@@ -7,6 +7,7 @@ import com.codenotfound.primefaces.converter.ColumnConverter;
 import org.primefaces.component.api.DynamicColumn;
 import org.primefaces.component.api.UIColumn;
 import org.primefaces.component.datatable.DataTable;
+import org.primefaces.event.ColumnResizeEvent;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -54,13 +55,17 @@ public class PositionTableEditor {
         positionTable.setDisplayedColumns(displayedColumns);
     }
 
-    public void onRowReorder(AjaxBehaviorEvent event) {
+    public void onColReorder(AjaxBehaviorEvent event) {
         DataTable dataTable = (DataTable) event.getComponent();
         List<UIColumn> columns = dataTable.getColumns();
         for (int i = 0; i < columns.size(); i++) {
             DynamicColumn dc = (DynamicColumn) columns.get(i);
             selectedColumns.get(dc.getIndex()).setOrder(i);
         }
+    }
+
+    public void onResize(ColumnResizeEvent event) {
+        System.out.println(event.getWidth());
     }
 
     public List<PositionTableColumnConfig> getConfigs() {
